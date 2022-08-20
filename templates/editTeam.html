@@ -1,0 +1,206 @@
+{%extends 'controller.html'%}
+{%block content%}
+<!-- edit team card -->
+<div class="card mb-3">
+    <div class="card-header">
+        <i class="#"></i>
+        Edit Team Form
+    </div>
+    <div class="card-body">
+        <!-- edit team form -->
+        <form action="{{url_for('update_team')}}" method="POST" autocomplete="off">
+            <div class="row">
+                <div class="col-md-6 my-1">
+                    <div class="card mb-3">
+                        <div class="card-header">Description</div>
+                        <div class="card-body text-center">
+                            In this section you can edit Team Name</br>
+                            add team members and managers, or delete entries </br>
+                            Deleted items can be found in "Bin" section
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 my-1">
+                    <div class="card mb-3">
+                        <div class="card-header">Team Name </div>
+                        <div class="card-body">
+                            <input name="team-entry-id" class="d-none" type="text" value="{{team._id}}">
+                            <div class="input-group ">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text delete-team pointer">
+                                        <span><i class="fas fa-trash-alt" data-toggle="modal" data-target="#modal_delete_team"></i></span>
+                                    </div>
+                                </div>
+                                <input class="form-control" name="team-name" type="text" value="{{team.name|title}}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 my-1">
+                    <div class="card mb-3">
+                        <div class="card-header">Team Members 
+                            <span id="add_user" class="float-right mr-3 pointer icon-container">
+                                Add User <i class="fas fa-plus ml-2"></i>
+                            </span> 
+                        </div>                      
+                        <div id="user_container" class="card-body">  
+                        {%for user in team.users%}
+
+                            <div  {%if loop.length>1%} id="{{loop.index}}" class="mt-3" {%else%} id="1"{%endif%}>
+                                {%if loop.length>1%} <hr> 
+                                {%endif%}
+                                <div class="form-row my-1">
+                                    <div class="col-md-6">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div id="delete_{{loop.index}}" data-toggle="modal" data-target="#modal_delete_user" class="input-group-text delete-user pointer">
+                                                    <span><i class="fas fa-trash-alt"></i></span>
+                                                </div>
+                                            </div>
+                                        {%if user is defined or user[0]==""%}
+                                            <input class="form-control" type="text" id="name_{{loop.index}}" name="name_{{loop.index}}" value="{{user.name|title}}" required>
+                                        {%else%}
+                                            <input class="form-control" type="text" id="name_1" name="name_1" placeholder="Name 1" required>
+                                        {%endif%}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="far fa-user"></i>
+                                                </div>
+                                            </div>
+                                        {%if user is defined or user[0]==""%}
+                                            <input class="form-control" type="text" id="surname_{{loop.index}}" name="surname_{{loop.index}}" value="{{user.surname}}" placeholder="Surname {{loop.index}}" required>
+                                        {%else%}
+                                            <input class="form-control" type="text" id="surname_1" name="surname_1" placeholder="Surname 1" required>
+                                        {%endif%}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row my-1">
+                                    <div class="col-md-6">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div  class="input-group-text">
+                                                    <i class="fas fa-at"></i>
+                                                </div>
+                                            </div>
+                                        {%if user is defined or user[0]==""%}    
+                                            <input class="form-control" type="email" id="email_{{loop.index}}" name="email_{{loop.index}}" value="{{user.email|title}}" required>
+                                        {%else%}
+                                            <input class="form-control" type="email" id="email_1" name="email_1" placeholder="Email 1" required>
+                                        {%endif%}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div  class="input-group-text">
+                                                    <i class="fas fa-user-tie"></i>
+                                                </div>
+                                            </div>    
+                                            <select class="form-control mr-3" name="role_{{loop.index}}">
+                                                    {%if user.role=="agent"%}
+                                                        <option value="Agent">Pick a role</option>
+                                                        <option selected="selected" value="Agent">Agent</option>
+                                                        <option value="Team Lead">Team Lead</option>
+                                                    {%elif user.role=="team lead"%}
+                                                        <option value="Agent">Pick a role</option>
+                                                        <option value="Agent">Agent</option>
+                                                        <option selected="selected"  value="Team Lead">Team Lead</option> 
+                                                    {%else%} 
+                                                        <option selected="selected" value="Agent">Pick a role</option>
+                                                        <option value="Agent">Agent</option>
+                                                        <option value="Team Lead">Team Lead</option> 
+                                                    {%endif%}                                         
+                                                </select>
+                                            <div class="form-check ml-2 mb-2">
+                                                {%if user is defined or user[0]==""%}
+                                                    <input 
+                                                        class="form-check-input" 
+                                                        name="checkuser_{{loop.index}}" 
+                                                        type="checkbox" 
+                                                        id="supervisor_checkbox_{{loop.index}}"
+                                                        {%if user.approver%} checked {%endif%}>
+                                                    <label class="form-check-label" for="supervisor_checkbox_{{loop.index}}">Supervisor</label>
+                                                {%else%}
+                                                    <input class="form-check-input" name="checkuser_1" type="checkbox" id="supervisor_checkbox_1">
+                                                    <label class="form-check-label" for="supervisor_checkbox_1">Supervisor</label>
+                                                {%endif%}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {%endfor%} 
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-primary mt-2">Submit Request</button>
+                </div>
+            </div>   
+        </form>
+    </div>
+</div>
+<!-- delete team modal -->
+<div class="modal fade" id="modal_delete_team" tabindex="-1" role="dialog" aria-labelledby="label_modal_delete_team" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h5 class="modal-title" id="label_modal_delete_team"> Delete Team</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="confirmation modal-body pb-0">
+                <p>Deleting this entry will result in moving <u class="text-danger">all its members</u> and their requests to the "Bin" section</p>
+                <hr>
+                <p>Please confirm your selection</p>
+                <hr>
+                <form class="mb-3" action="{{url_for('delete_entry',scope='team')}}" method="POST">
+                    <input id="modal-team-entry-id" name="entry_id" class="d-none" type="text">
+                    <input name="scope" class="d-none" type="text" value="team">
+                    <button type="button" class="btn btn-secondary"  data-dismiss="modal">Close</button>
+                    <button type="submit" class="approval_submit btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- delete user modal -->
+<div class="modal fade" id="modal_delete_user" tabindex="-1" role="dialog" aria-labelledby="label_modal_delete_user" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header text-center">
+            <h5 class="modal-title" id="label_modal_delete_user"> Delete User</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <form class="mb-3" action="{{url_for('delete_entry',scope='user')}}" method="POST">
+            <div class="confirmation modal-body pb-0">
+                <p>Deleting this entry will result in moving <u id="alert-user-selected" class="text-danger"> </u> and all requests related to this email address to the "Bin" section</p>
+                <hr>
+                <p>Please confirm your selection</p>
+                <hr>
+                
+                    <input id="modal-user-entry-id" name="entry_id" class="d-none" type="text">
+                    <input id="modal-user-email" name="user_email" class="d-none" type="text">
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="approval_submit btn btn-danger">Delete</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="{{url_for('static',filename='vendor/jquery/jquery.min.js')}}"></script>
+<script src="{{url_for('static',filename='js/edit-team.js')}}"></script>
+{%endblock%}

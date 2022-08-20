@@ -1,0 +1,111 @@
+{%extends 'controller.html'%}
+{%block content%}
+<!-- add new team card -->
+<div class="card mb-3">
+    <div class="card-header">
+        <i class="#"></i>
+        Add Team Form
+    </div>
+    <div class="card-body">
+        <!-- add new team form -->
+        <form action="{{url_for('insert_team')}}" method="POST" autocomplete="off">
+            <div class="row">
+                <div class="col-md-6 my-1">
+                    <div class="card mb-3">
+                        <div class="card-header">Description</div>
+                        <div class="card-body text-center">
+                            In this section you will be required to input a name for your new Team,</br>
+                            then to add at least a team member and a manager. </br>
+                            Should you want to add more users going further feel free to "Edit" your new Team
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 my-1">
+                    <div class="card mb-3">
+                        <div class="card-header">Team Name</div>
+                        <div class="card-body">
+                            <div class="form-row">
+                                <div class="form-group col">
+                                    <input class="form-control" type="text" id="team_name" name="team_name" placeholder="Team Name" required>
+                                </div>   
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 my-1">
+                    <div class="card mb-3">
+                        <div class="card-header">Team Members
+                            <span id="add_user" class="float-right mr-3 pointer icon-container">
+                                Add User <i class="fas fa-plus ml-2"></i>
+                            </span> 
+                        </div>
+                        <div id="user_container" class="card-body">
+                            <div id="1">
+                                <div class="form-row my-1">
+                                    <div class="col-md-6">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="fas fa-user"></i>
+                                                </div>
+                                            </div>
+                                            <input class="form-control" type="text" id="name_1" name="name_1" placeholder="Name 1" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="far fa-user"></i>
+                                                </div>
+                                            </div>
+                                            <input class="form-control" type="text" id="surname_1" name="surname_1" placeholder="Surname 1" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row my-1">
+                                    <div class="col-md-6">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div  class="input-group-text">
+                                                    <i class="fas fa-at"></i>
+                                                </div>
+                                            </div>
+                                            <input class="form-control" type="email" id="email_1" name="email_1" placeholder="Email 1" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div  class="input-group-text">
+                                                    <i class="fas fa-user-tie"></i>
+                                                </div>
+                                            </div>    
+                                            <select class="form-control mr-3" name="role_1" id="role_1">
+                                                <option selected value="Agent">Pick a role</option>
+                                                <option value="Agent">Agent</option>
+                                                <option value="Team Lead">Team Lead</option>
+                                                <option value="Manager">Manager</option>
+                                            </select>
+                                            <div class="form-check ml-2 mb-2">
+                                                <input class="form-check-input" name="checkuser_1" type="checkbox" id="supervisor_checkbox_1">
+                                                <label class="form-check-label" for="supervisor_checkbox_1">Supervisor</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-2">Submit Request</button>
+        </form>
+    </div>
+</div>
+<script src="{{url_for('static',filename='vendor/jquery/jquery.min.js')}}"></script>
+<script src="{{url_for('static',filename='js/add-new-team.js')}}">
+</script>
+{%endblock%}
