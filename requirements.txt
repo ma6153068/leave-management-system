@@ -29,3 +29,4 @@ waitress==2.1.2
 Werkzeug==0.15.5
 wrapt==1.11.2
 zipp==3.8.1
+gunicorn== 19.9.0
